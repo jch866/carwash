@@ -1,0 +1,22 @@
+@import 'reset.scss';
+
+$fontSize:37.5;
+
+@function px2rem($px){
+    @return ($px/$fontSize)*1rem
+}
+
+@mixin center(){
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+#app {
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  font-size:px2rem(14);
+  color: #2c3e50;
+}

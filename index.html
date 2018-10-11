@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+  <!-- 网站开启对web app程序的支持 -->
+  <meta content="yes" name="apple-mobile-web-app-capable" />
+  <!--忽略将页面中的数字识别为电话号码。-->
+  <meta name="format-detection" content="telephone=no" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="Author" content="非洗不可" />
+  <title>非洗不可</title>
+</head>
+
+<body>
+  <div id="app">
+    <router-view/>
+  </div>
+</body>
+<script>
+  const setFont = ()=>{
+      //document.body.clientWidth;  屏幕VIEWPORT宽度
+      //document.documentElement.clientWidth;
+      let html = document.querySelector('html');
+      //document.getElementsByTagName('html')[0]
+      let font = window.innerWidth / 10;
+      font = font>50?50:font;
+      html.style.fontSize = font+'px';
+  };
+  window.onresize = function(){
+    setFont();
+  }
+  document.addEventListener('DOMContentLoaded',setFont);
+
+</script>
+</html>
