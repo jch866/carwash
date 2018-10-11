@@ -1,18 +1,19 @@
 var path = require('path')
 var webpack = require('webpack')
+var packagejson = require('./package.json')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
+//var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
-let HTML_PATH = path.resolve(__dirname, './public');
-let tpl = path.resolve(__dirname, './index.html')
-
+let HTML_PATH = __dirname+ '/public';
+let tpl = __dirname+'/index.html'
 module.exports = {
-  entry: './src/main.js',
+  entry: {
+    vendor: Object.keys(packagejson.dependencies),//分离框架
+    app: './src/main.js' },
   output: {
     filename: "bundle.js?[hash]",
-    // path: HTML_PATH + '/build',
-    path: path.resolve(__dirname, './')
-    //publicPath: "/build/",
-    //chunkFilename: '[name].js?[hash]'
+    path: path.resolve(__dirname, 'public/build'), //打包后的文件存放的地方
+    publicPath: "/build/", //引入HTML文件中的路径
   },
   module: {
     rules: [{
@@ -80,47 +81,45 @@ module.exports = {
     },
     extensions: ['*', '.js', '.vue', '.json']
   },
-  // devServer: {
-  //   historyApiFallback: true,
-  //   noInfo: true,
-  //   overlay: true
-  // },
+  devServer: {
+    historyApiFallback: true,
+    noInfo: false,
+    overlay: true,
+  },
   performance: {
     hints: false
   },
-  devtool: '#eval-source-map'
+  //devtool: '#eval-source-map'
 }
 
-if (process.env.NODE_ENV === 'production') {
-  module.exports.devtool = '#source-map'
-  // http://vue-loader.vuejs.org/en/workflow/production.html
-  module.exports.plugins = (module.exports.plugins || []).concat([
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: '"production"'
-      }
-    }),
-    new webpack.optimize.UglifyJsPlugin({
-      sourceMap: true,
-      compress: {
-        warnings: false
-      }
-    }),
-    new webpack.optimize.CommonsChunkPlugin({name:'vendor', filename:'vendor.bundle.js?[hash]'}),
-    new HtmlWebpackPlugin({
-      filename: HTML_PATH + '/index.html',
-      template: tpl,
-      inject: 'body',
-      minify: {
-        removeComments: true, //去注释
-        collapseWhitespace: true, //压缩空格
-        // removeAttributeQuotes: true //去除属性引用
-        // more options:
-        // https://github.com/kangax/html-minifier#options-quick-reference
-      }
-    }),
-    new webpack.LoaderOptionsPlugin({
-      minimize: true
-    })
-  ])
- }
+let plugins_arr = [
+  new webpack.DefinePlugin({
+    'process.env': {
+      NODE_ENV: '"production"'
+    }
+  }),
+  new webpack.optimize.UglifyJsPlugin({
+    sourceMap: true,
+    compress: {
+      warnings: false
+    }
+  }),
+  new webpack.optimize.CommonsChunkPlugin({ name: ['vendor', 'runtime'], filename: '[name].bundle.js?[hash]' }),
+  new HtmlWebpackPlugin({
+    filename: HTML_PATH + '/index.html',
+    template: tpl,
+    inject: 'body',
+    minify: {
+      removeComments: true, //去注释
+      collapseWhitespace: true, //压缩空格
+    }
+  }),
+  new webpack.LoaderOptionsPlugin({
+    minimize: true
+  })
+]
+// if (process.env.NODE_ENV === 'production') {
+//module.exports.devtool = '#source-map'
+// http://vue-loader.vuejs.org/en/workflow/production.html
+module.exports.plugins = (module.exports.plugins || []).concat(plugins_arr)
+// }
