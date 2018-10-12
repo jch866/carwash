@@ -3,6 +3,7 @@ var webpack = require('webpack')
 var packagejson = require('./package.json')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
+var CleanPlugin = require("clean-webpack-plugin");
 
 let HTML_PATH = __dirname + '/public';
 let tpl = __dirname + '/index.html'
@@ -92,7 +93,8 @@ module.exports = {
 }
 
 let plugins_arr = [
-  new ExtractTextPlugin('index_[hash].css?'), //这个路径是相对 output.publicPath的
+  new ExtractTextPlugin('index.css?[hash]'), //这个路径是相对 output.publicPath的
+  new CleanPlugin(['public']),//打包的时候，要清除的文件夹
   new webpack.DefinePlugin({
     'process.env': {
       NODE_ENV: '"production"'
