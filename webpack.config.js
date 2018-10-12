@@ -4,12 +4,13 @@ var packagejson = require('./package.json')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
 //var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
-let HTML_PATH = __dirname+ '/public';
-let tpl = __dirname+'/index.html'
+let HTML_PATH = __dirname + '/public';
+let tpl = __dirname + '/index.html'
 module.exports = {
   entry: {
-    vendor: Object.keys(packagejson.dependencies),//分离框架
-    app: './src/main.js' },
+    vendor: Object.keys(packagejson.dependencies), //分离框架
+    app: './src/main.js'
+  },
   output: {
     filename: "bundle.js?[hash]",
     path: path.resolve(__dirname, 'public/build'), //打包后的文件存放的地方
@@ -81,10 +82,14 @@ module.exports = {
     },
     extensions: ['*', '.js', '.vue', '.json']
   },
+  //webpack-dev-server 的配置 【服务器基于node.js构建】
+  //可以用 npm run devnode 启动并实时更新
   devServer: {
     historyApiFallback: true,
     noInfo: false,
     overlay: true,
+    //hot: true, 热更新，已经在npm命令里面配置了
+    contentBase: "./public" //本地服务器所加载的页面所在的目录
   },
   performance: {
     hints: false
@@ -93,17 +98,19 @@ module.exports = {
 }
 
 let plugins_arr = [
+  // new ExtractTextPlugin('public/build/index.css'),
   new webpack.DefinePlugin({
     'process.env': {
       NODE_ENV: '"production"'
     }
   }),
-  new webpack.optimize.UglifyJsPlugin({
-    sourceMap: true,
-    compress: {
-      warnings: false
-    }
-  }),
+  // new webpack.optimize.UglifyJsPlugin({
+  //   sourceMap: false,
+  //   compress: {
+  //     warnings: false
+  //   }
+  // }),
+  //new webpack.HotModuleReplacementPlugin()//热加载插件
   new webpack.optimize.CommonsChunkPlugin({ name: ['vendor', 'runtime'], filename: '[name].bundle.js?[hash]' }),
   new HtmlWebpackPlugin({
     filename: HTML_PATH + '/index.html',
@@ -116,7 +123,8 @@ let plugins_arr = [
   }),
   new webpack.LoaderOptionsPlugin({
     minimize: true
-  })
+  }),
+
 ]
 // if (process.env.NODE_ENV === 'production') {
 //module.exports.devtool = '#source-map'
