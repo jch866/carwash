@@ -4,8 +4,19 @@ $fontSize:37.5;
 $FS: 16; //字体大小
 $tabMargin:50; //tab标签的margin值
 $advHeight:200;
+$liWidth:80; //时长套餐中的圆 长宽值
 $contentbg:#f8f8f8;
-.tc {text-align: center;}
+$red:#f44336;
+$blue:#2196f3;
+$orange:#ff9800;
+$green:#4caf50;
+.blue{color:$blue;}
+.red{color:$red;}
+.green{color:$green;}
+.orange{color:$orange;}
+.tc {
+  text-align: center;
+}
 
 @function px2rem($px) {
   @return ($px/$fontSize)*1rem
@@ -23,6 +34,8 @@ $contentbg:#f8f8f8;
   background: $contentbg;
   height: 100%
 }
+
+
 /*===================*/
 
 .mint-tab-item-label {
@@ -35,17 +48,20 @@ $contentbg:#f8f8f8;
     margin-right: px2rem($tabMargin);
   }
 }
+
 .content_top {
   padding-top: px2rem(10);
 }
+
 .check_title {
   line-height: px2rem(50);
   height: px2rem(50);
   background: white;
-  color:#21699f;
+  color: #21699f;
   border-bottom: 1px solid #2196f3;
   @extend .tc;
 }
+
 .check_case {
   ul {
     width: 100%;
@@ -56,8 +72,9 @@ $contentbg:#f8f8f8;
     li {
       border: 1px solid #673ab7;
       border-radius: 50%;
-      height: px2rem(80);
-      width: px2rem(80);
+      background: white;
+      height: px2rem($liWidth);
+      width: px2rem($liWidth);
       @extend .tc;
       display: flex;
       justify-content: center;
@@ -70,24 +87,36 @@ $contentbg:#f8f8f8;
         font-size: px2rem(18);
         line-height: px2rem(24);
       }
-      &.active {
+      /*&.active {
         border: 3px solid #2196f3;
+      }*/
+      &.active:before {
+        content: '';
+        background: none;
+        position: absolute;
+        height: px2rem($liWidth);
+        width: px2rem($liWidth);
+        border: 3px solid #2196f3;
+        border-radius: 50%;
       }
+      ;
     }
   }
 }
+
 .check_note {
   line-height: px2rem(28);
   background: white;
   margin: px2rem(10);
   padding: px2rem(10);
   border-radius: 10px;
-  p{
-    &:last-child{
+  p {
+    &:last-child {
       text-indent: 2em
     }
   }
 }
+
 .adv_banner {
   width: 100%;
   height: px2rem($advHeight);
@@ -97,6 +126,7 @@ $contentbg:#f8f8f8;
     height: 100%
   }
 }
+
 .bottom_pay {
   display: flex;
   height: px2rem(50);
@@ -109,7 +139,11 @@ $contentbg:#f8f8f8;
   z-index: 2;
   .pay_info {
     flex: 1;
-    padding-left: px2rem(15)
+    padding-left: px2rem(15);
+    .pay_amount{
+      color:#d33535;
+      font-size: px2rem(18)
+    }
   }
   .pay_btn {
     display: inline-block;
