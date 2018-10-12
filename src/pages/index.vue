@@ -23,9 +23,16 @@
       </mt-tab-container-item>
       <mt-tab-container-item id="2">
         <section class="content_top">
-          <mt-cell title="洗车记录" is-link to="/record"></mt-cell>
-          <mt-cell title="联系我们" value="关注微信公众号”EP车管家“留言"></mt-cell>
+            <div class="mine_profile">
+                <div class="mine_avatar"><img src="../assets/avatar.png" alt=""></div>
+                <div class="mine_phone">13218885998</div>
+            </div>
+            <mt-cell title="洗车记录" is-link to="/record"></mt-cell>
+            <mt-cell title="联系我们" value="关注微信公众号”EP车管家“留言"></mt-cell>
         </section>
+        <!-- <div class='bottom_mine'>
+            <img src="../assets/adv.jpg">
+        </div> -->
       </mt-tab-container-item>
     </mt-tab-container>
   </div>

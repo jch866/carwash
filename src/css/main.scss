@@ -17,7 +17,7 @@ $green:#4caf50;
 .tc {
   text-align: center;
 }
-
+img {width: 100%;height: 100%}
 @function px2rem($px) {
   @return ($px/$fontSize)*1rem
 }
@@ -36,7 +36,7 @@ $green:#4caf50;
 }
 
 
-/*===================*/
+/*=========首页默认==========*/
 
 .mint-tab-item-label {
   font-size: px2rem($FS)
@@ -57,7 +57,7 @@ $green:#4caf50;
   line-height: px2rem(50);
   height: px2rem(50);
   background: white;
-  color: #21699f;
+  color: #3f51b5;
   border-bottom: 1px solid #2196f3;
   @extend .tc;
 }
@@ -120,11 +120,8 @@ $green:#4caf50;
 .adv_banner {
   width: 100%;
   height: px2rem($advHeight);
-  background: #ada0a0;
-  img {
-    width: 100%;
-    height: 100%
-  }
+  background: white;
+  @extend img;
 }
 
 .bottom_pay {
@@ -151,5 +148,36 @@ $green:#4caf50;
     background: #1c9c17;
     color: white;
     @extend .tc
+  }
+}
+/*=========首页“我的”==========*/
+.bottom_mine{
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: px2rem($advHeight);
+  img {
+    width: 100%;
+    height: 100%
+  }
+}
+.mine_profile{
+  background: #8dceff;
+  padding: px2rem(15);
+  .mine_avatar{
+    width: px2rem(150);
+    height: px2rem(150);
+    border-radius: 50%;
+    margin:0 auto;
+    img{
+      border-radius: 50%;
+    }
+    @extend img;
+  }
+  .mine_phone{
+    font-size: px2rem(18);
+    @extend .tc;
+    line-height: px2rem(50);
+    color:#000000;
   }
 }
