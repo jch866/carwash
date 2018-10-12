@@ -1,22 +1,121 @@
 @import 'reset.scss';
 
 $fontSize:37.5;
+$FS: 16; //字体大小
+$tabMargin:50; //tab标签的margin值
+$advHeight:200;
+$contentbg:#f8f8f8;
+.tc {text-align: center;}
 
-@function px2rem($px){
-    @return ($px/$fontSize)*1rem
+@function px2rem($px) {
+  @return ($px/$fontSize)*1rem
 }
 
-@mixin center(){
-    display:flex;
-    justify-content:center;
-    align-items:center;
+@mixin center() {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  font-size:px2rem(14);
+  font-size: px2rem($FS);
   color: #2c3e50;
+  background: $contentbg;
+  height: 100%
+}
+/*===================*/
+
+.mint-tab-item-label {
+  font-size: px2rem($FS)
+}
+
+.mint-navbar {
+  .mint-tab-item {
+    margin-left: px2rem($tabMargin);
+    margin-right: px2rem($tabMargin);
+  }
+}
+.content_top {
+  padding-top: px2rem(10);
+}
+.check_title {
+  line-height: px2rem(50);
+  height: px2rem(50);
+  background: white;
+  color:#21699f;
+  border-bottom: 1px solid #2196f3;
+  @extend .tc;
+}
+.check_case {
+  ul {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    overflow: hidden;
+    padding: 15px 0;
+    li {
+      border: 1px solid #673ab7;
+      border-radius: 50%;
+      height: px2rem(80);
+      width: px2rem(80);
+      @extend .tc;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      h2 {
+        font-size: px2rem(26);
+        line-height: px2rem(30);
+      }
+      span {
+        font-size: px2rem(18);
+        line-height: px2rem(24);
+      }
+      &.active {
+        border: 3px solid #2196f3;
+      }
+    }
+  }
+}
+.check_note {
+  line-height: px2rem(28);
+  background: white;
+  margin: px2rem(10);
+  padding: px2rem(10);
+  border-radius: 10px;
+  p{
+    &:last-child{
+      text-indent: 2em
+    }
+  }
+}
+.adv_banner {
+  width: 100%;
+  height: px2rem($advHeight);
+  background: #ada0a0;
+  img {
+    width: 100%;
+    height: 100%
+  }
+}
+.bottom_pay {
+  display: flex;
+  height: px2rem(50);
+  line-height: px2rem(50);
+  color: #333;
+  background: white;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: 2;
+  .pay_info {
+    flex: 1;
+    padding-left: px2rem(15)
+  }
+  .pay_btn {
+    display: inline-block;
+    width: px2rem(100);
+    background: #1c9c17;
+    color: white;
+    @extend .tc
+  }
 }

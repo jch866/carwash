@@ -16,6 +16,11 @@ let r = [
 Vue.use(Router);
 
 let washRouter = new Router({ mode: 'history', routes: r });
+washRouter.beforeEach(function(to, from, next){
+  //console.log(to)
+  //console.log(from)
+  next()
+})
 
 const setFont = () => {
   //document.body.clientWidth;  屏幕VIEWPORT宽度
