@@ -3,7 +3,7 @@
 $fontSize:37.5;
 $FS: 16; //字体大小
 $tabMargin:50; //tab标签的margin值
-$advHeight:200;
+$advHeight:230;
 $liWidth:80; //时长套餐中的圆 长宽值
 $contentbg:#f8f8f8;
 $red:#f44336;
@@ -87,9 +87,9 @@ img {width: 100%;height: 100%}
         font-size: px2rem(18);
         line-height: px2rem(24);
       }
-      /*&.active {
-        border: 3px solid #2196f3;
-      }*/
+      &.active {
+        color:#2196f3;
+      }
       &.active:before {
         content: '';
         background: none;
@@ -139,7 +139,7 @@ img {width: 100%;height: 100%}
     padding-left: px2rem(15);
     .pay_amount{
       color:#d33535;
-      font-size: px2rem(18)
+      font-size: px2rem(22)
     }
   }
   .pay_btn {
@@ -190,3 +190,43 @@ img {width: 100%;height: 100%}
   padding: px2rem(10);
   margin-bottom: 10px;
 }
+/*========= 登录注册 ==========*/
+.login_title{
+    top: 0;
+    right: 0;
+    left: 0;
+    position: fixed;
+    z-index: 1;
+    height:px2rem(50);
+    line-height: px2rem(50);
+    font-size: px2rem(18);
+    background: white;
+    @extend .tc
+}
+.login_form{
+  padding-top: px2rem(50);
+  .tip{
+    padding: px2rem(10);
+    line-height: px2rem(24);
+    text-indent: 2em;
+    background: white;
+    margin:px2rem(20) auto;
+    @extend .orange
+  }
+  .mint-cell-title{
+    width: px2rem(80)
+  }
+  .mint-field-core{
+
+  }
+}
+.remain_seconds{
+  display: inline-block;
+  background: #e2f1ff;
+  line-height: px2rem(34);
+  border-radius: 6px;
+  padding: 0 px2rem(30);
+  @extend .orange
+}
+
+.submitBtn{margin:px2rem(20) 0;}

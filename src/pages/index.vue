@@ -55,7 +55,6 @@ export default {
     },
     handleClick() {
       let vm = this;
-      vm.$messagebox('haha ')
     },
     getData() {
       let vm = this;
