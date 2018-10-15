@@ -1,7 +1,13 @@
 const cfg = {
   index: {
     url: {
-      get: '/coupon/couType_lists?page=1&pagesize=1',
+      get: '/coupon/couType_lists?page=1&pagesize=10',
+    }
+  },
+  login:{
+    url:{
+      login:'/login/app',
+      send:'/user/pushCaptcha'
     }
   },
   suits: [

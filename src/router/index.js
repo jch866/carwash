@@ -31,7 +31,7 @@ let washRouter = new Router({
 });
 washRouter.beforeEach(function(to, from, next) {
     if (to.path != '/login') {
-        let lg = utils.getCache('login');
+        let lg = utils.getCache('access_token');
         if (lg) {
             next()
         } else {
@@ -46,7 +46,6 @@ const setFont = () => {
     //document.body.clientWidth;  屏幕VIEWPORT宽度
     //document.documentElement.clientWidth;
     let html = document.querySelector('html');
-    //document.getElementsByTagName('html')[0]
     let font = window.innerWidth / 10;
     font = font > 50 ? 50 : font;
     html.style.fontSize = font + 'px';
