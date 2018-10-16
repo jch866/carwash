@@ -4,10 +4,10 @@
     <div class="login_form">
         <p class="tip">请输入您的手机号码，登录或注册您的自助洗车账号</p>
       <mt-field label="手机号" placeholder="请输入手机号" v-model='mobile'></mt-field>
-      <mt-field label="图片验证码" placeholder="图片验证码" v-model="valipic">
+      <mt-field label="图片验证码" placeholder="图片验证码" v-model="valipic" v-if='!test'>
           <img @click="getValiPic"  :src="imgSrc" v-if="imgSrc" alt=""/>
       </mt-field>
-      <mt-field label="验证码" placeholder="短信验证码" v-model='valicode'>
+      <mt-field label="验证码" placeholder="短信验证码" v-model='valicode' v-if='!test'>
          <mt-button  v-if="!send" size="small" @click="sendCode"  type="primary">获取验证码</mt-button>
          <span v-if="send" class="remain_seconds">{{`${seconds}s`}}</span>
       </mt-field>
@@ -75,7 +75,7 @@ export default {
             vm.$toast({ message: '请输入正确手机号'});
             return;
         }
-        if( vm.valipic == '' || vm.valipic!==vm.imgCode){
+        if( vm.valipic == ''){
             vm.$toast({ message: '请输入正确的图片验证码'});
             return;
         }

@@ -19,6 +19,42 @@ let tools = {
         query = query.substring(0, query.length - 1);
         return query;
     },
+    clientcheck: function() {
+        var ua = window.navigator.userAgent.toLowerCase();
+        if (ua.match(/MicroMessenger/i) == 'micromessenger') { //微信登陆
+            return 'WECHAT';
+        } else if (ua.match(/Alipay/i) == "alipay") { //支付宝登陆
+            return 'ZFB';
+        } else if (ua.match(/colourlife/i) == "colourlife") { //彩之云app
+            return 'CZY';
+        } else {
+            return 'BROWSER';
+        }
+    },
+    is_browser: function() {
+        var ua = window.navigator.userAgent.toLowerCase();
+        if (ua.match(/MicroMessenger/i) != 'micromessenger' && ua.match(/Alipay/i) != "alipay" && ua.match(/colourlife/i) != "colourlife") {
+            return true;
+        }
+        return false;
+    },
+    setTitle: function(title) {
+        document.title = title;
+        var mobile = navigator.userAgent.toLowerCase();
+        if (/iphone|ipad|ipod/.test(mobile)) {
+            var iframe = document.createElement('iframe');
+            iframe.style.visibility = 'hidden';
+            iframe.setAttribute('src', 'loading.png');
+            var iframeCallback = function() {
+                setTimeout(function() {
+                    iframe.removeEventListener('load', iframeCallback);
+                    document.body.removeChild(iframe);
+                }, 0);
+            };
+            iframe.addEventListener('load', iframeCallback);
+            document.body.appendChild(iframe);
+        }
+    },
 };
 const utils = {
     config,
@@ -73,13 +109,22 @@ const utils = {
             if (!openid || !access_token || !appid) {
                 if (window.location.host == 'c.aparcar.cn' || window.location.host == 'app.aparcar.cn') {
                     window.location.href = "https://eapi.aparcar.cn/index/SnsapiBase?backurl=" + encodeURIComponent(window.location.href);
-                } else if (window.location.host == 'w.aparcar.cn' || window.location.host == config.base_domain) {
+                } else if (window.location.host == 'w.aparcar.cn' || window.location.host == hostsRoot.base) {
                     window.location.href = "https://feedback.aparcar.cn/index/wxauth?name=yixuan&scope=snsapi_base&backurl=" + encodeURIComponent(window.location.href);
                 }
-            } else if (openid != '' && access_token != '') {
+            } else if (openid && access_token) {
                 window.localStorage.setItem("imei", query.access_token);
-                let data = {client_type:"wechat",appid,openid,city,username:query['nickname']};
-                return this.fetch('/login/app', {method: 'post',body: data}).then(function(json) {
+                let data = {
+                    client_type: "wechat",
+                    appid,
+                    openid,
+                    city,
+                    username: query['nickname']
+                };
+                return this.fetch('/login/app', {
+                    method: 'post',
+                    body: data
+                }).then(function(json) {
                     window.localStorage.setItem("access_token", json.content.access_token);
                     return func('WECHAT', true, '');
                 })
