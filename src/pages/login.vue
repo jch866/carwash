@@ -4,10 +4,10 @@
     <div class="login_form">
         <p class="tip">请输入您的手机号码，登录或注册您的自助洗车账号</p>
       <mt-field label="手机号" placeholder="请输入手机号" v-model='mobile'></mt-field>
-      <!-- <mt-field label="" placeholder="输入图片验证码" v-model="picyzm">
-          <img  @click="getYZCode"  :src="imgSrc" v-if="imgSrc" alt="">
-      </mt-field> -->
-      <mt-field label="验证码" placeholder="获取验证码" v-model='valicode'>
+      <mt-field label="图片验证码" placeholder="图片验证码" v-model="valipic">
+          <img @click="getValiPic"  :src="imgSrc" v-if="imgSrc" alt=""/>
+      </mt-field>
+      <mt-field label="验证码" placeholder="短信验证码" v-model='valicode'>
          <mt-button  v-if="!send" size="small" @click="sendCode"  type="primary">获取验证码</mt-button>
          <span v-if="send" class="remain_seconds">{{`${seconds}s`}}</span>
       </mt-field>
@@ -35,6 +35,9 @@ export default {
           sec:1000,
           logining:false,
           test:true,
+          valipic:'',
+          imgCode:'',
+          imgSrc:'',
         }
     },
     computed:{
@@ -47,12 +50,34 @@ export default {
         },
     },
     methods:{
+      getValiPic(){
+          var vm = this;
+          let url = vm.api.sendImgcode+'?source=mobile_login';//需要用token去请验证码
+          utils.fetch(url).then(function(data){
+              if(data.code == 0 && data.content){
+                  vm.imgSrc = data.content.captcha;
+                  //imgCode可以和图片上的验证对比
+                  vm.imgCode = data.content.code && data.content.code.toUpperCase();
+                  vm.resetTimer();
+              }
+          })
+      },
       sendCode(){
         let vm = this;
-        let url = vm.api.send+'?mobile=' + vm.mobile +'&source=mobile_login&captcha_source=mobile_login';
+        let data = {
+          mobile:vm.mobile,
+          code:vm.valipic,
+          source:'mobile_login',
+          captcha_source:'mobile_login'
+        }
+        let url = vm.api.send+'?'+utils.setQueryString(data);
         if( vm.mobile == ''){
             vm.$toast({ message: '请输入正确手机号'});
-            return false;
+            return;
+        }
+        if( vm.valipic == '' || vm.valipic!==vm.imgCode){
+            vm.$toast({ message: '请输入正确的图片验证码'});
+            return;
         }
         vm.send = true;
         vm.timer && clearInterval(vm.timer)
@@ -60,15 +85,16 @@ export default {
             if(data.code == 0){
                 vm.timer = setInterval(function(){
                    vm.seconds -- ;
-                   if(vm.seconds === 0 ){
-                    vm.send = false;
-                    vm.seconds = 60;
-                    clearInterval(vm.timer)
-                   }
+                   (vm.seconds <= 0 ) && vm.resetTimer()
                 },vm.sec)
             }
             vm.$toast({ message:data.message });
         })
+      },
+      resetTimer(){
+        this.send = false;
+        this.seconds = 60;
+        this.timer&&clearInterval(this.timer)
       },
       userlogin(){
         let vm = this;
@@ -96,7 +122,7 @@ export default {
       },
       login(){
         var vm = this;
-        let url = vm.api.login;// /login/app
+        let url = vm.api.login;
         window.localStorage.setItem("imei",'mobile_login_'+this.mobile);
         let data = {
             client_type:'mobile2',
@@ -119,7 +145,10 @@ export default {
         })
       },
     },
-    mounted(){
+    beforeMount(){
+      this.getValiPic();
+    },
+    Mounted(){
 
     }
 }

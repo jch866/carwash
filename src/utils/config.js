@@ -7,7 +7,8 @@ const cfg = {
   login:{
     url:{
       login:'/login/app',
-      send:'/user/pushCaptcha'
+      send:'/user/pushCaptcha',
+      sendImgcode:'/user/captcha'
     }
   },
   suits: [
