@@ -24,9 +24,9 @@ import utils from '../utils'
 export default {
 
     data(){
-        let cfg = utils.config;
+        let cfg = utils.config.login;
         return {
-        api:cfg.login.url,
+        api:cfg.url,
           mobile:'',
           valicode:'',
           send:false,

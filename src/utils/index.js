@@ -55,6 +55,14 @@ let tools = {
             document.body.appendChild(iframe);
         }
     },
+    getUserInfo(vm){
+        //1.data中  user:{mobile:'',client_id:'',openid:'',appid:'',userid:'',clientType:''}
+        //2.mounted中 this.user = utils.getUserInfo(this);
+        let loginData =  vm.$store.state._global.login.data;
+        let clientType = vm.$store.state._global.clientType
+        let {user_mobile:mobile,user_id:client_id,user_openid:openid,user_appid:appid,user_id:userid} = loginData;
+        return {mobile,client_id,openid,appid,userid,clientType};
+    },
 };
 const utils = {
     config,
