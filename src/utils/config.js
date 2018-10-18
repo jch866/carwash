@@ -20,7 +20,7 @@ const cfg = {
       lists: '/flashbox/orderLists',
     },
     status:{
-      "created":'1',
+      "created":"已创建","paid":"支付成功","invalid":"失效订单","canceld":"取消"
     }
   },
 

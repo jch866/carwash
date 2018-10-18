@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import _wash from './wash'
 Vue.use(Vuex)
 let _global = {
       state:{
@@ -27,6 +28,7 @@ let _global = {
 var store = new Vuex.Store({
     modules: {
         _global,
+        _wash,
     }
 })
 

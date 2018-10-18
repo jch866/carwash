@@ -81,15 +81,13 @@ export default {
         this.checkedVal = obj.val;
         this.checkedID = obj.id;
     },
-    handleClick() {
-      let vm = this;
-    },
     getMealInfo() {
       let vm = this;
       let url = vm.api.get+"?wd_id="+vm.wd_id;
       utils.fetch(url).then(res => {
         if(res&&res.code ===0 ){
-           vm.suits =  res.content.lists|| []
+           vm.suits =  res.content.lists|| [];
+           vm.$store.commit('setSuits',vm.suits)
         }
       })
     },
