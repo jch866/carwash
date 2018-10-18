@@ -2,10 +2,10 @@
     <div class="check_case">
       <ul>
         <li v-for='(item,index) in option' @click='clickhandler(index,item)'
-        :class="{'active': check_value == item.value}">
+        :class="{'active': check_value == item.packageID}">
           <div>
-            <h2>{{item.price}}</h2>
-            <span>{{item.time}}</span>
+            <h2>{{item.price}}元</h2>
+            <span>{{Math.floor(item.duration/60)}}分钟</span>
           </div>
         </li>
       </ul>
@@ -28,8 +28,8 @@ export default {
   methods: {
     clickhandler(idx,item){
       //console.log(idx,item)
-      this.check_value = item.value;
-      this.$emit('change',item.value)
+      this.check_value = item.packageID;
+      this.$emit('change',{id:item.packageID,val:item.price})
     },
     setval(){
       this.check_value = this.value;

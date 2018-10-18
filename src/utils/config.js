@@ -1,64 +1,29 @@
 const cfg = {
-  index: {
+  index: { //首页  index.vue
     url: {
-      get: '/coupon/couType_lists?page=1&pagesize=10',
+      get: '/flashbox/mealInfo', //2.获取设备套餐信息// 参数：wd_id
+      detail: '/flashbox/mealDetail', //3.获取设备套餐详情// 参数：wd_id，packageID
+      status: '/flashbox/checkDevice', //1.获取设备状态// 参数：wd_id
+      check: '/flashbox/checkMobile', //4.检测用户是否注册手机号// 参数：client_id
+      create: '/flashbox/create' //5.创建订单// 参数：source,type,money,wd_id,client_id
     }
   },
-  login:{
-    url:{
-      login:'/login/app',
-      send:'/user/pushCaptcha',
-      sendImgcode:'/user/captcha'
+  login: { //登录 login.vue
+    url: {
+      login: '/login/app',
+      send: '/user/pushCaptcha',
+      sendImgcode: '/user/captcha'
     }
   },
-  suits: [
-    { time: '15分钟', value: '1', price: '1元', index: 0 },
-    { time: '30分钟', value: '2', price: '2元', index: 1 },
-    { time: '45分钟', value: '3', price: '3元', index: 2 }
-  ],
-  orders:[{
-    id:'1',
-    num:'1536726373436UTGhlJi',
-    time:'2018-10-12 12:26:13',
-    status:'待支付',
-    net:'碧云湾',
-    type:'1元15分钟'
-  },{
-    id:'2',
-    num:'1536726373436UTGhlJi',
-    time:'2018-10-12 12:26:13',
-    status:'订单成功',
-    net:'碧云湾',
-    type:'3元45分钟'
-  },{
-    id:'3',
-    num:'1536726373436UTGhlJi',
-    time:'2018-10-12 12:26:13',
-    status:'订单失效',
-    net:'碧云湾',
-    type:'1元15分钟'
-  },{
-    id:'4',
-    num:'1536726373436UTGhlJi',
-    time:'2018-10-12 12:26:13',
-    status:'订单撤销',
-    net:'碧云湾',
-    type:'1元15分钟'
-  },{
-    id:'5',
-    num:'1536726373436UTGhlJi',
-    time:'2018-10-12 12:26:13',
-    status:'支付成功',
-    net:'碧云湾',
-    type:'1元15分钟'
-  },{
-    id:'6',
-    num:'1536726373436UTGhlJi',
-    time:'2018-10-12 12:26:13',
-    status:'订单失败',
-    net:'碧云湾',
-    type:'1元15分钟'
-  }]
+  record: { //洗车纪录 record.vue
+    url: {
+      lists: '/flashbox/orderLists',
+    },
+    status:{
+      "created":'1',
+    }
+  },
+
 }
 
 export default cfg;

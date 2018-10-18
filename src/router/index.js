@@ -29,45 +29,42 @@ let router = new Router({
 
 router.beforeEach(function(to, from, next) {
     let TITLE = '非洗不可';
-    if (to.path != '/login') {
+    if(to.path != '/login'){
         var token = window.localStorage.getItem('access_token') || '';
-        if (token == "" && utils.is_browser()) {
+        if( token == "" && utils.is_browser() ){
             window.location.href = "/login?redirect_addr=" + encodeURIComponent(window.location.href);
-        };
-        utils.access_token(to.query, function(type, res, mobile) { //type值: WECHAT,ZFB,CZY,BROWSER; res:表示获取token成功还是失败; mobile:手机号
-            store.commit('client_type', type);
-            if (res) {
-                utils.fetch('/login/appconfig').then(function(json) {
-                    if (typeof(json) != 'undefined' && json.code == 0) {
-                        if (json.content.islogin == true) {
+        }
+        utils.access_token(to.query,function(type,res,mobile){  //type值: WECHAT,ZFB,CZY,BROWSER; res:表示获取token成功还是失败; mobile:手机号
+            store.commit('client_type',type);
+            if(res){
+                utils.fetch('/login/appconfig').then(function(json){
+                    if(typeof(json) != 'undefined' && json.code == 0){
+                        if(json.content.islogin){
                             let lgdata = json.content.login;
                             var appid = lgdata.user_appid || '';
                             var phone = lgdata.user_mobile || '';
-                            if (type == 'CZY' && mobile != '' && phone != mobile) { //彩之云app切换账号后强制重新授权
+                            if(type == 'CZY' && mobile != '' && phone != mobile ){ //彩之云app切换账号后强制重新授权
                                 store.commit('sign_out');
                                 window.location.reload();
                             }
-                            store.commit('sign_in', {
-                                islogin: true,
-                                data: json.content.login
-                            }); //登录信息
+                            store.commit('sign_in',{islogin:true,data:json.content.login});    //登录信息
                             utils.setTitle(TITLE);
-                        } else {
+                        }else{
                             store.commit('sign_out');
-                            if (!utils.is_browser()) window.location.reload();
+                            if(!utils.is_browser()) window.location.reload();
                         }
                         next();
-                    } else {
+                    }else{
                         window.location.reload();
                     }
                 });
-            } else {
+            }else{
                 store.commit('sign_out');
                 next();
             }
         });
-    } else {
-        store.commit('client_type', utils.clientcheck());
+    }else{
+        store.commit('client_type',utils.clientcheck());
         next();
     }
 })

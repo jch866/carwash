@@ -10,7 +10,7 @@
         <section class="content_top">
           <div class="adv_banner"><img src="../assets/banner.jpg"></div>
           <div class="check_title">洗车时长选择</div>
-          <my-check-suit :option='config.suits' v-model='checkedVal' @change='setselectVal'></my-check-suit>
+          <my-check-suit :option='suits' v-model='checkedID' @change='setselectVal'></my-check-suit>
           <div class="check_note">
             <p class="orange">备注:</p>
             <p>支付成功以后须在30分钟内启动设备，否则订单失效，失效的订单无法退款，请知悉！</p>
@@ -18,14 +18,14 @@
         </section>
         <div class='bottom_pay'>
           <span class="pay_info">订单金额：<span class="pay_amount">{{`¥${checkedVal}.00元`}}</span></span>
-          <span class="pay_btn">微信支付</span>
+          <span class="pay_btn" @click='wechatPay'>微信支付</span>
         </div>
       </mt-tab-container-item>
       <mt-tab-container-item id="2">
         <section class="content_top">
             <div class="mine_profile">
                 <div class="mine_avatar"><img src="../assets/avatar.png" alt=""></div>
-                <div class="mine_phone">13218885998</div>
+                <div class="mine_phone">{{user.mobile}}</div>
             </div>
             <mt-cell title="洗车记录" is-link to="/record"></mt-cell>
             <mt-cell title="联系我们" value="关注微信公众号”EP车管家“留言"></mt-cell>
@@ -38,34 +38,68 @@
   </div>
 </template>
 <script>
-import util from "../utils";
+import utils from "../utils";
 export default {
   data() {
-    let config = util.config;
+    let config = utils.config.index;
     return {
+      api: config.url,
       selected: "1",
-      checkedVal:'1',//默认套餐
+      checkedVal:0,//默认套餐
+      checkedID:0,
       config,
-      api: config.index.url,
-    }
-  },
-  methods: {
-    setselectVal(val){
-        this.checkedVal = val;
-    },
-    handleClick() {
-      let vm = this;
-    },
-    getData() {
-      let vm = this;
-      let url = vm.api.get;
-      util.fetch(url).then(res => {
-      })
+      suits:[],
+      wd_id:0,
+      user:{mobile:'',client_id:'',openid:'',appid:'',userid:'',clientType:''}
     }
   },
   mounted() {
     let vm = this;
-  }
+    vm.user = utils.getUserInfo(vm);
+  },
+  beforeMount(){
+    let vm = this;
+    vm.wd_id = vm.$route.params.wd_id;
+    vm.wd_id=1 //测试用
+    vm.getMealInfo();
+  },
+  methods: {
+    wechatPay(){
+      let vm = this;
+      let url =  vm.api.create;
+      if(vm.checkedVal<=0){vm.$toast({ message: '请选择套餐'});return;}
+      // let data = {
+      //       source,
+      //       type,
+      //       money:vm.checkedVal,
+      //       wd_id:vm.wd_id,
+      //       client_id:vm.user.client_id
+      // }
+
+    },
+    setselectVal(obj){
+        this.checkedVal = obj.val;
+        this.checkedID = obj.id;
+    },
+    handleClick() {
+      let vm = this;
+    },
+    getMealInfo() {
+      let vm = this;
+      let url = vm.api.get+"?wd_id="+vm.wd_id;
+      utils.fetch(url).then(res => {
+        if(res&&res.code ===0 ){
+           vm.suits =  res.content.lists|| []
+        }
+      })
+    },
+    checkmobile(){
+      let vm = this;
+      let url = vm.api.check+"?client_id="+vm.user.client_id;
+      utils.fetch(url).then(res => {})
+    },
+  },
+
 }
 
 </script>
