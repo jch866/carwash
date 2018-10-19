@@ -40,6 +40,20 @@ export default {
           imgSrc:'',
         }
     },
+    beforeMount(){
+      var clientType = this.$store.state._global.clientType;
+        if( clientType == "CZY" || clientType == 'WECHAT' || clientType == 'ZFB' ){
+            window.location.href = "/";
+        }else{
+            var token = window.localStorage.getItem('access_token') ? window.localStorage.getItem('access_token') : '';
+            if(token == ''){
+                this.get_unique_id();
+            }else{
+                this.check_unique_id();
+                this.getValiPic();
+            }
+        }
+    },
     computed:{
         redirect_addr:function(){
             var q = this.$router.currentRoute.query;
@@ -124,6 +138,8 @@ export default {
         var vm = this;
         let url = vm.api.login;
         window.localStorage.setItem("imei",'mobile_login_'+this.mobile);
+        if (!vm.mobile) { vm.$toast('请输入手机号'); return; }
+        if (!vm.valicode) { vm.$toast('请输入短信验证码'); return; }
         let data = {
             client_type:'mobile2',
             user_agent:encodeURIComponent(navigator.userAgent),
@@ -144,10 +160,32 @@ export default {
             }
         })
       },
+      get_unique_id(){
+            var vm = this;
+            window.localStorage.setItem("imei",'Tourist');
+            var data = "client_type=browser&user_agent=" + encodeURIComponent(navigator.userAgent) + "&origin=" + encodeURIComponent(window.location.origin) + "&openid=13800138000";
+            utils.fetch('/index/location').then(function(json){
+                data += "&ip="+json.content.ip;
+                utils.fetch("/login/app",{method:'post',body:data}).then(function(res){
+                    if(typeof(res) != 'undefined' && res.code == 0) {
+                        var token = res.content.access_token;
+                        window.localStorage.setItem("access_token",token);
+                        vm.getValiPic();
+                    }
+                })
+            });
+        },
+        check_unique_id(){
+            utils.fetch('/login/appconfig').then(function(json){
+                if( typeof(json) != 'undefined' && json.code == 0 && typeof(json.content.login) == 'undefined' ){
+                    window.localStorage.removeItem("imei");
+                    window.localStorage.removeItem("access_token");
+                    window.location.reload();
+                }
+            });
+        }
     },
-    beforeMount(){
-      this.getValiPic();
-    },
+
     Mounted(){
 
     }

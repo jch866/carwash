@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import index from './../pages/index.vue'
 import login from './../pages/login.vue'
 import record from './../pages/record.vue'
+import afterpay from './../pages/afterpay.vue'
 import utils from './../utils'
 import store from './../store/state.js'
 
@@ -18,7 +19,10 @@ let r = [{
 }, {
     path: '/record',
     component: record
-}, ]
+}, {
+    path: '/afterpay/:channel/:type/:sn/:status',
+    component: afterpay
+} ]
 
 Vue.use(Router);
 
