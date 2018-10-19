@@ -80,7 +80,7 @@ img {width: 100%;height: 100%}
       justify-content: center;
       align-items: center;
       h2 {
-        font-size: px2rem(26);
+        font-size: px2rem(24);
         line-height: px2rem(30);
       }
       span {
@@ -230,3 +230,14 @@ img {width: 100%;height: 100%}
 }
 
 .submitBtn{margin:px2rem(20) 0;}
+/*========= 支付回调页面 afterpay ==========*/
+.pay_spinner{
+  padding-top: px2rem(40);
+  @extend .tc
+}
+.order_tips{
+  font-size:px2rem(20);
+  padding: px2rem(40) 0;
+
+  @extend .tc
+ }

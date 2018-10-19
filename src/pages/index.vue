@@ -18,7 +18,7 @@
         </section>
         <div class="placeholder"></div>
         <div class='bottom_pay'>
-          <span class="pay_info">订单金额：<span class="pay_amount">{{`¥${checkedVal}.00元`}}</span></span>
+          <span class="pay_info">订单金额：<span class="pay_amount">{{`¥${checkedVal}元`}}</span></span>
           <span class="pay_btn" @click='wechatPay'>微信支付</span>
         </div>
       </mt-tab-container-item>
@@ -45,19 +45,18 @@ export default {
     let config = utils.config.index;
     return {
       api: config.url,
+      SUITPRICE:0.01,
       selected: "1",
       checkedVal: 0, //默认套餐
       checkedID: 0,
       config,
       suits: [],
       wd_id: 0,
-      user: { mobile: '', client_id: '', openid: '', appid: '', userid: '', clientType: '' }
+      user: { mobile: '', client_id: '', openid: '', appid: '', userid: '', clientType: '' },
+      qrcheckTimer:null,
+      qr:{show:false}
     }
   },
-  // mounted() {
-  //   let vm = this;
-  //   vm.user = utils.getUserInfo(vm);
-  // },
   beforeMount() {
     let vm = this;
     vm.user = utils.getUserInfo(vm);
@@ -88,6 +87,7 @@ export default {
         if (!dat) return '';
         let { tnum, amount } = dat;
         vm.$indicator.open({ text: '微信下单中...', spinnerType: 'fading-circle' });
+        // path: '/afterpay/:channel/:type/:sn/:status',
         let perfixer = "https://feedback.aparcar.cn/afterpay/wechat/wash/" + tnum;
         let success_url = perfixer + "/success";
         let error_url = perfixer + "/fail";
@@ -105,8 +105,8 @@ export default {
           pay_type: 0,
           source: "EPWECHAT",
           sn: tnum,
-          qr:0,
-          money: Number(amount)
+          qr: 0,
+          money: amount
         };
         return odata;
       }).then(res => {
@@ -117,11 +117,12 @@ export default {
             if (json.content.redirect != '') {
               window.location.href = json.content.redirect;
             } else {
+              //他人代付情况下
               vm.qr.code = json.content.qr_code; //扫码支付 二维码地址
               vm.qr.type = 'wx';
               vm.qr.show = true;
-              let url = `https://${window.location.host}/afterpay/wechat/wash/${tnum}/success`;
-              vm.qr_check(param.tnum, url);
+              let url = `https://feedback.aparcar.cn/afterpay/wechat/wash/${tnum}/success`;
+              vm.qr_check(param.tnum, url); //检查二维码是否失效
             }
           } else {
             vm.$toast("支付信息提交失败");
@@ -139,10 +140,25 @@ export default {
       let url = `${vm.api.get}?wd_id=${vm.wd_id}`;
       utils.fetch(url).then(res => {
         if (res && res.code === 0) {
-          vm.suits = res.content.lists || [];
+          let suitArr = res.content.lists || [];
+          vm.suits = suitArr.map(item=>{item.price = vm.SUITPRICE;return item;})
           vm.$store.commit('setSuits', vm.suits)
         }
       })
+    },
+    qr_check: function(sn, success_url) {
+      var vm = this;
+      let url = `${vm.api.order}?page=1&pagesize=10&tnum=${sn}`;
+      vm.qrcheckTimer = setInterval(function() {
+        utils.fetch(url).then(function(json) {
+          if (typeof(json) != 'undefined' && json.code == 0) {
+            if (json.content && json.content.total > 0 && json.content.lists[0].status == 'paid') {
+              window.location.href = success_url;
+              vm.qrcheckTimer && clearInterval(vm.qrcheckTimer)
+            }
+          }
+        })
+      }, 2000);
     },
   },
 

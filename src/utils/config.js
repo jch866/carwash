@@ -1,3 +1,4 @@
+let orderApi = '/flashbox/orderLists'; //查询订单是否支付成功  参数：tnum page pagesize
 const cfg = {
   index: { //首页  index.vue
     url: {
@@ -6,7 +7,8 @@ const cfg = {
       status: '/flashbox/checkDevice', //1.获取设备状态// 参数：wd_id
       check: '/flashbox/checkMobile', //4.检测用户是否注册手机号// 参数：client_id
       create: '/flashbox/create', //5.创建订单// 参数：source,type,money,wd_id,client_id
-      unified: '/pay/unified' //下单
+      unified: '/pay/unified', //下单
+      order:orderApi
     }
   },
   login: { //登录 login.vue
@@ -24,6 +26,11 @@ const cfg = {
       "created":"已创建","paid":"支付成功","invalid":"失效订单","canceld":"取消"
     }
   },
+  afterpay:{
+    url:{
+      order:orderApi
+    }
+  }
 
 }
 
