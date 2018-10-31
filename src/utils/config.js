@@ -8,7 +8,7 @@ const cfg = {
       check: '/flashbox/checkMobile', //4.检测用户是否注册手机号// 参数：client_id
       create: '/flashbox/create', //5.创建订单// 参数：source,type,money,wd_id,client_id
       unified: '/pay/unified', //下单
-      order:orderApi
+      order: orderApi
     }
   },
   login: { //登录 login.vue
@@ -22,13 +22,16 @@ const cfg = {
     url: {
       lists: '/flashbox/orderLists',
     },
-    status:{
-      "created":"已创建","paid":"支付成功","invalid":"失效订单","canceld":"取消"
+    status: {
+      "created": "已创建",
+      "paid": "支付成功",
+      "invalid": "失效订单",
+      "canceld": "取消"
     }
   },
-  afterpay:{
-    url:{
-      order:orderApi
+  afterpay: { //支付返回 afterpay.vue
+    url: {
+      order: orderApi
     }
   }
 
