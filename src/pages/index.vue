@@ -136,6 +136,7 @@ export default {
       this.checkedID = obj.id;
     },
     getMealInfo() {
+
       let vm = this;
       let url = `${vm.api.get}?wd_id=${vm.wd_id}`;
       utils.fetch(url).then(res => {
